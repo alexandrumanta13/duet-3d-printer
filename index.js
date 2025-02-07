@@ -1,7 +1,7 @@
-const axios = require('axios');
-const { API, DynamicPlatformPlugin, Logging, PlatformAccessory, PlatformConfig, Service, Characteristic } = require('homebridge');
+import axios from 'axios';
+import { API, DynamicPlatformPlugin, Logging, PlatformAccessory, PlatformConfig, Service, Characteristic } from 'homebridge';
 
-module.exports = (api) => {
+export default (api) => {
   api.registerPlatform('Duet3D', Duet3DPlatform);
 };
 
@@ -39,7 +39,7 @@ class Duet3DPlatform {
   async setPrinterStatus(value, callback) {
     try {
       const command = value ? 'M25' : 'M0';
-      await axios.get(`http://${this.config.host}/rr_gcode?gcode=${command}`);
+      await axios.get(`http://${this.config.ip}/rr_gcode?gcode=${command}`);
       callback();
     } catch (error) {
       this.log.error('Error setting printer status:', error);
