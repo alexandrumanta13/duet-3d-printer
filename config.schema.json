@@ -1,5 +1,5 @@
 {
-  "pluginAlias": "ExampleHomebridgePlugin",
+  "pluginAlias": "HomebridgeDuet",
   "pluginType": "platform",
   "singular": true,
   "strictValidation": false,
@@ -10,7 +10,7 @@
         "title": "Name",
         "type": "string",
         "required": true,
-        "default": "Example Dynamic Platform"
+        "default": "Duet 3D Printer"
       }
     }
   }

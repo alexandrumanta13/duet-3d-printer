@@ -1,5 +1,5 @@
 {
-  "name": "homebridge-plugin-name",
+  "name": "homebridge-duet",
   "displayName": "Duet 3D Printer",
   "type": "module",
   "version": "1.0.0",

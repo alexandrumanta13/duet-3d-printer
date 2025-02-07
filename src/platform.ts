@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { API, DynamicPlatformPlugin, Logging, PlatformAccessory, PlatformConfig, Service, Characteristic, CharacteristicValue, CharacteristicSetCallback } from 'homebridge';
 
-export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
+export class DuetHomebridgePlatform implements DynamicPlatformPlugin {
   public readonly log: Logging; // Schimbat la public
   private readonly config: PlatformConfig;
   private readonly api: API;
