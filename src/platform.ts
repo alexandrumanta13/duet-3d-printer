@@ -98,6 +98,21 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
           callback(error as Error);
         }
       });
+
+    const progressService = accessory.getService('Print Progress') || accessory.addService(this.Service.OccupancySensor, 'Print Progress');
+
+    progressService.getCharacteristic(this.Characteristic.OccupancyDetected)
+      .on('get', async (callback) => {
+        try {
+          this.log.info('Fetching print progress...');
+          const progress = await this.getPrintProgress();
+          this.log.info('Print progress fetched:', progress);
+          callback(null, progress);
+        } catch (error) {
+          this.log.error('Error fetching print progress:', error);
+          callback(error as Error);
+        }
+      });
   }
 
   discoverDevices() {
@@ -135,7 +150,7 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
 
   async getPrinterStatus() {
     try {
-      const response = await axios.get('http://192.168.1.146/rr_status?type=2');
+      const response = await axios.get('192.168.1.146/rr_status?type=2');
       return response.data;
     } catch (error) {
       this.log.error('Error fetching printer status:', error);
@@ -145,7 +160,7 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
 
   async getTemperatures() {
     try {
-      const response = await axios.get('http://192.168.1.146/rr_status?type=2');
+      const response = await axios.get('192.168.1.146/rr_status?type=2');
       const temperatures = {
         extruder: response.data.temps.current[0],
         bed: response.data.temps.bed.current,
@@ -157,9 +172,19 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
     }
   }
 
+  async getPrintProgress() {
+    try {
+      const response = await axios.get('192.168.1.146/rr_status?type=3');
+      return response.data.progress;
+    } catch (error) {
+      this.log.error('Error fetching print progress:', error);
+      throw new Error('Failed to fetch print progress');
+    }
+  }
+
   async pausePrint() {
     try {
-      await axios.get('http://192.168.1.146/rr_gcode?gcode=M25');
+      await axios.get('192.168.1.146/rr_gcode?gcode=M25');
     } catch (error) {
       this.log.error('Error pausing print:', error);
       throw new Error('Failed to pause print');
@@ -168,7 +193,7 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
 
   async stopPrint() {
     try {
-      await axios.get('http://192.168.1.146/rr_gcode?gcode=M0');
+      await axios.get('192.168.1.146/rr_gcode?gcode=M0');
     } catch (error) {
       this.log.error('Error stopping print:', error);
       throw new Error('Failed to stop print');
